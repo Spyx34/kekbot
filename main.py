@@ -1,3 +1,4 @@
+import random as r
 import discord
 from discord.ext import commands
 import asyncio
@@ -24,8 +25,10 @@ async def info(ctx, *args):
         await ctx.send("Use #lonely if you need company")
     elif args[0] == "do_bezos":
         await ctx.send("Use #do_bezos if you want the bot to repeat you")
+    elif args[0] == "truck":
+        await ctx.send("Use #truck <user> to warn your friend of a incoming truck")
     else:
-        await ctx.send("-HELP-MENU-\n#lonely if you feel lonely \n#do_bezos to get bezost\nUse #info <command> for more information")
+        await ctx.send("-HELP-MENU-\n#lonely if you feel lonely \n#do_bezos to get bezost\n#truck summon a truck\nUse #info <command> for more information")
 
 @client.event
 async def on_message_delete(message):
@@ -58,19 +61,26 @@ async def do_bezos(ctx, *args):
 @client.command(name = "truck")
 async def truck(ctx, user: discord.Member):
     channel = ctx.channel
-    await ctx.send(f"{user.mention} achtung ein Truck!")
+    await ctx.send(f"{user.mention} achtung ein Truck!\nWeiche mit ninja_move aus!")
     def check(m):
-        return m.content == '#ninja_move' and m.channel == channel and m.author == user
+        return m.content == 'ninja_move' and m.channel == channel and m.author == user
     try:
-        msg = await client.wait_for('message', check=check, timeout = 10.0)
+        msg = await client.wait_for('message', check=check, timeout = 15.0)
     except asyncio.TimeoutError:
         await channel.send(f"{user.mention} wird vom Truck überrolt!")
     else:
-        await channel.send(f"{user.mention} macht eine coole Ninja-Rolle nach rechts und weicht aus!")
+        zuf = r.randint(1,4)
+        if zuf == 1:
+            await channel.send(f"{user.mention} macht eine coole Ninja-Rolle nach rechts und weicht aus!")
+        elif zuf == 2:
+            await channel.send(f"{user.mention} macht eine coole Ninja-Rolle nach links und weicht aus!")
+        elif zuf == 3:
+            await channel.send(f"{user.mention} legt sich flach auf den Boden und lässt den Truck über sich brausen!")
+        else:
+            await channel.send(f"{user.mention} springt über den Truck und überlebt!")
 
 
 
 
 
 client.run(TOKEN)
-#Venzel du hs
