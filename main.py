@@ -1,4 +1,3 @@
-
 import discord
 from discord.ext import commands
 import asyncio
@@ -74,3 +73,4 @@ async def truck(ctx, user: discord.Member):
 
 
 client.run(TOKEN)
+#Venzel du hs
