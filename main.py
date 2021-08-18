@@ -7,6 +7,8 @@ from discord.utils import get
 from discord.ext.commands import Bot
 from discord import User
 import time
+import giphy_client
+from giphy_client.rest import ApiException
 
 TOKEN = 'ODc3MzEwNTgxMDE3ODIxMjI1.YRwxJg.YguoUXUYdmBbj3TWWzDjH9Zyvlg'
 
@@ -47,6 +49,11 @@ async def on_message_delete(message):
     Autor = message.author
     x = Inhalt + "\n--" + str(Autor)
     await channel.send(x)
+    
+    
+@client.command()
+async def clear(ctx, Anzahl = 15):
+    await ctx.channel.purge(limit=int(Anzahl))
 
 
 
@@ -109,6 +116,19 @@ async def truck(ctx, user: discord.Member):
         else:
             await channel.send(f"{user.mention} springt über den Truck und überlebt!")
 
+            
+@client.command(aliases=['gif', 'searchgif'])
+async def gutenacht(ctx,*,Suche="good night"):
+    api_key = 'GSGMjDZvTnm9Ks5ZBBmKnk2hXTOOVHPq'
+    api_instance = giphy_client.DefaultApi()
+
+    try:
+        api_responce = api_instance.gifs_search_get(api_key, Suche, limit = 5) #limit gibt limit für return der anzahl an gifs an
+        gif_liste = list(api_responce.data)
+        gif = r.choice(gif_liste)
+        await ctx.channel.send(gif.embed_url)
+    except ApiException as e:
+        print('fehlversuch gif aufzurufen mit api--> check api key')
 
 
 #@client.command()
