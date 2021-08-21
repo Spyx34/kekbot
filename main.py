@@ -172,6 +172,47 @@ async def rickroll(ctx,*,user : discord.Member,Suche="rickroll"):
 @client.command()
 async def kill(ctx, user: discord.Member):
     await ctx.send(f'{user.mention} stirbt')
+   
+
+#Counter:
+
+@client.event
+async def on_message(message):
+    if message.channel.id == 804278089592602635:
+        counterliste = open('counterliste.txt', 'r')
+        nummer = counterliste.read()
+        Nachricht = message.content
+        counterliste.close()
+        Autorliste = open('Autorliste.txt','r')
+        ex_autor = Autorliste.read()
+        Autor = message.author
+        Autorliste.close()
+
+        try:
+            integer_1 = int(nummer)
+            message_int = int(Nachricht)
+            print(Autor)
+            print(ex_autor)
+            if  str(ex_autor) == str(Autor):
+                await message.delete()
+
+            else:
+
+                if integer_1 + 1 == message_int:
+                    richtig = open('counterliste.txt', 'w')
+                    richtig.truncate(0)
+                    richtig.write(f'{message_int}')
+                    counterliste.close()
+                    Autorliste = open('Autorliste.txt','w')
+                    Autorliste.truncate(0)
+                    Autorliste.write(f'{Autor}')
+                    Autorliste.close()
+                else:
+                    await message.delete
+
+        except:
+            await message.delete()
+
 
 
 client.run(TOKEN)
