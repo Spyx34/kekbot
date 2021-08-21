@@ -212,6 +212,20 @@ async def on_message(message):
 
         except:
             await message.delete()
+     
+    
+    
+    
+#Errors:
+
+
+@clear.error
+async def clear_error(ctx,error):
+    if isinstance(error,commands.MissingRequiredArgument):
+        await ctx.send('Da fehlt noch irgendwas')
+    elif isinstance(error,commands.MissingPermissions):
+        await ctx.channel.purge(limit=1)
+        await ctx.send('Dazu hast du keine Berechtigung', delete_after=15)
 
 
 
