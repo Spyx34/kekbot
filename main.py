@@ -212,7 +212,23 @@ async def on_message(message):
 
         except:
             await message.delete()
-     
+
+#@client.event
+#async def on_message_delete(message):
+#    if message.channel.id == 804278089592602635 and message.author.id != user.id:
+#        channel = client.get_channel(804278089592602635)
+#        inhalt = message.content
+#        recount = open('counterliste.txt','r+')
+#        zahl = recount.read()
+#        zahl = int(zahl)
+#        recount.truncate(0)
+#        zahl_1 = zahl - 1
+#        recount.write(f'{zahl_1}')
+#        recount.close()
+#        await channel.send(zahl_1)
+#    else:
+#       pass
+
     
     
     
