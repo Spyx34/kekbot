@@ -178,6 +178,7 @@ async def kill(ctx, user: discord.Member):
 
 @client.event
 async def on_message(message):
+    await client.process_commands(message)
     if message.channel.id == 804278089592602635:
         counterliste = open('counterliste.txt', 'r')
         nummer = counterliste.read()
