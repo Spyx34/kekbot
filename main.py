@@ -11,7 +11,7 @@ import time
 intents = discord.Intents.default()
 intents.members = True
 
-TOKEN = 'ODc3MzEwNTgxMDE3ODIxMjI1.YRwxJg.YguoUXUYdmBbj3TWWzDjH9Zyvlg'
+TOKEN = 'Your Token'
 
 client = commands.Bot(command_prefix = "#", intents = intents)
 
@@ -27,7 +27,8 @@ async def on_member_join(member):
     server_name = client.get_guild(802985801100165200)
     await member.send(f'Willkommen auf {server_name}!')
     print(1)
-
+    rolle = discord.utils.get(member.guild.roles, name='Member')
+    await member.add_roles(rolle)
 
 @client.command()
 async def info(ctx, *args):
