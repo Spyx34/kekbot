@@ -72,6 +72,55 @@ async def on_message_delete(message):
 async def clear(ctx, Anzahl = 15):
     await ctx.channel.purge(limit=int(Anzahl) + 1)
 
+@client.command()
+@commands.has_permissions(kick_members=True)
+async def kick(ctx,member: discord.Member,*,reason=None):
+    await member.send(f'You were kicked from the Schnitzel Server {reason}')
+    await member.kick(reason=reason)
+    await ctx.send(f'Kicked {member} {reason}')
+
+
+@client.command()
+@commands.has_permissions(ban_members=True)
+async def ban(ctx,member: discord.Member,*,reason=None):
+    await member.send(f'You were banned from the Schnitzel Server {reason}')
+    await member.ban(reason=reason)
+    await ctx.send(f'Banned {member} {reason}')
+
+@client.command(aliases=['pardon'])
+@commands.has_permissions(ban_members=True)
+async def unban(ctx,*,member):
+    banned_users = await ctx.guild.bans()
+    print(banned_users)
+    member_name, member_tag = member.split('#')
+
+    for ban_entry in banned_users:
+        user = ban_entry.user
+        reason = ban_entry.reason
+
+        if (user.name,user.discriminator) == (member_name,member_tag):
+            await ctx.guild.unban(user)
+            await ctx.send(f'Unbanned {user.name}\nHe was banned for: {reason}')
+            
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Da fehlt noch irgendwas')
+    elif isinstance(error, commands.CommandNotFound):
+        await ctx.send('Diesen command gibt es noch nicht')
+        time.sleep(2)
+        await ctx.send('Du Knecht', delete_after = 1)
+    elif isinstance(error, commands.CommandOnCooldown):
+        await ctx.send('Nicht so schnell du Knecht')
+    elif isinstance(error, commands.NSFWChannelRequired):
+        await ctx.send('Lass das lieber in einem nsfw channel machen :wink:')
+    elif isinstance(error, commands.UserNotFound):
+        await ctx.send('User konnte nicht gefunden werden')
+    elif isinstance(error,commands.MissingPermissions):
+        await ctx.send('Dazu hast du keine Berechtigung :(')
+    else:
+        await ctx.send('Irgendwas ist da schief gelaufen')
+
 
 @client.command()
 async def lonely(ctx):
