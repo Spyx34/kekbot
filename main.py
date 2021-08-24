@@ -223,6 +223,10 @@ async def rickroll(ctx,*,user : discord.Member,Suche="rickroll"):
 async def kill(ctx, user: discord.Member):
     await ctx.send(f'{user.mention} stirbt')
    
+@client.command(aliases=['profilbild','pb','avatar'])
+async def pfp(ctx,member: discord.Member):
+    await ctx.send(member.avatar_url)
+
 
 #Counter:
 
