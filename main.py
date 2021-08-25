@@ -101,7 +101,82 @@ async def unban(ctx,*,member):
         if (user.name,user.discriminator) == (member_name,member_tag):
             await ctx.guild.unban(user)
             await ctx.send(f'Unbanned {user.name}\nHe was banned for: {reason}')
-            
+
+@client.command()
+async def mute(ctx,member: discord.Member):
+    seine_rollen = member.roles
+    Mitglied = []
+    f = open('txt_files/Muted.txt', 'a')
+    f.write(f'{member.display_name}')
+
+    for i in seine_rollen:
+        rolle = str(i)  
+        if rolle != '@everyone':
+
+            Mitglied.append(rolle)
+            f.write(f'/{rolle}')
+        else:
+            pass
+    f.write('/\n')
+
+
+
+
+    for i in Mitglied:
+        rolle = discord.utils.get(member.guild.roles, name=f'{i}')
+        await member.remove_roles(rolle)
+
+    rolle = discord.utils.get(member.guild.roles, name='Muted')
+    await member.add_roles(rolle)
+    f.close()
+    await ctx.send(f'Muted {member.display_name}')
+
+@client.command()
+async def unmute(ctx,member: discord.Member):
+    rolle = discord.utils.get(member.guild.roles, name='Muted')
+    await member.remove_roles(rolle)
+
+    Zeilen = 0
+    name = str(member.display_name)
+    with open('txt_files/Muted.txt', 'r+') as read_obj:
+        for line in read_obj:
+            Zeilen += 1
+
+            if name in line:
+
+                f = open('txt_files/Muted.txt', 'r')
+                x = f.readlines()
+                zeile = Zeilen - 1
+                f.close()
+                output_1 = x[zeile]
+                output_2 = output_1.split('/')
+
+                output_2.pop(0)
+                output_2.pop(-1)
+                with open("txt_files/Muted.txt", "r") as f:
+                    lines = f.readlines()
+                with open("txt_files/Muted.txt", "w") as f:
+                    for line in lines:
+                        print(line)
+                        if line != output_1:
+                            f.write(line)
+                        else:
+                            print('gesuchte line gefunden')
+                            pass
+
+    try:
+
+        for role in output_2:
+            rolle = str(role)
+            richtige_rolle = discord.utils.get(member.guild.roles, name=f'{rolle}')
+            await member.add_roles(richtige_rolle)
+            await ctx.send(f'Rolle {rolle} zurück gegeben')
+    except:
+        await ctx.send('This user isnt muted')
+
+
+    read_obj.close()
+
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
