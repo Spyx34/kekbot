@@ -103,6 +103,7 @@ async def unban(ctx,*,member):
             await ctx.send(f'Unbanned {user.name}\nHe was banned for: {reason}')
 
 @client.command()
+@commands.has_permissions(kick_members=True)
 async def mute(ctx,member: discord.Member):
     seine_rollen = member.roles
     Mitglied = []
@@ -132,6 +133,7 @@ async def mute(ctx,member: discord.Member):
     await ctx.send(f'Muted {member.display_name}')
 
 @client.command()
+@commands.has_permissions(kick_members=True)
 async def unmute(ctx,member: discord.Member):
     rolle = discord.utils.get(member.guild.roles, name='Muted')
     await member.remove_roles(rolle)
