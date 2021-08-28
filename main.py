@@ -258,7 +258,7 @@ async def truck(ctx, user: discord.Member):
 
 @client.command(aliases=[ 'searchgif'])
 async def gif(ctx,*,Suche="dog"):
-    api_key = 'GSGMjDZvTnm9Ks5ZBBmKnk2hXTOOVHPq'
+    api_key = 'YOUR_GIPHY_API_KEY'
     api_instance = giphy_client.DefaultApi()
 
     try:
@@ -271,7 +271,7 @@ async def gif(ctx,*,Suche="dog"):
 
 @client.command(aliases=[ 'goodnight'])
 async def gutenacht(ctx,*,Suche="good night"):
-    api_key = 'GSGMjDZvTnm9Ks5ZBBmKnk2hXTOOVHPq'
+    api_key = 'YOUR_GIPHY_API_KEY'
     api_instance = giphy_client.DefaultApi()
 
     try:
@@ -284,7 +284,7 @@ async def gutenacht(ctx,*,Suche="good night"):
 
 @client.command(aliases=[ 'rickastley', 'rick'])
 async def rickroll(ctx,*,user : discord.Member,Suche="rickroll"):
-    api_key = 'GSGMjDZvTnm9Ks5ZBBmKnk2hXTOOVHPq'
+    api_key = 'YOUR_GIPHY_API_KEY'
     api_instance = giphy_client.DefaultApi()
 
     try:
@@ -310,7 +310,7 @@ async def pfp(ctx,member: discord.Member):
 @client.event
 async def on_message(message):
     await client.process_commands(message)
-    if message.channel.id == 804278089592602635:
+    if message.channel.id == counter_channel_id:
         counterliste = open('counterliste.txt', 'r')
         nummer = counterliste.read()
         Nachricht = message.content
