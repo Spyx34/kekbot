@@ -362,6 +362,160 @@ async def on_message(message):
 #       pass
 
     
+#Tic Tac Toe:
+player1 = ''
+player2 = ''
+turn = ''
+gameOver = True
+
+board = []
+
+umzugewinnen = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
+]
+
+@client.command(aliases=['ttt'])
+async def tictactoe(ctx, p1: discord.Member, p2: discord.Member):
+    global player1
+    global player2
+    global turn
+    global gameOver
+    global count
+
+    if gameOver:
+        global board
+        board = [':white_large_square:',':white_large_square:',':white_large_square:',
+                 ':white_large_square:',':white_large_square:',':white_large_square:',
+                 ':white_large_square:',':white_large_square:',':white_large_square:']
+        turn = ''
+        gameOver = False
+        count = 0
+        player1 = p1
+        player2 = p2
+
+        line = ''
+
+        #board senden
+        for x in range(len(board)):
+            if x == 2 or x == 5 or x == 8:
+                line += ' ' +board[x]
+                await ctx.send(line)
+                line = ''
+            else:
+                line += ' ' + board[x]
+
+        #Beginner
+
+        num = r.randint(1,2)
+        if num == 1:
+            turn = player1
+            await ctx.send(f'<@{str(player1.id)}>, du bist dran')
+
+        elif num == 2:
+            turn = player2
+            await ctx.send(f'<@{str(player2.id)}>, du bist dran')
+
+        else:
+            await ctx.send('Es spielt gerade jemand, versuch es danach nochmal')
+
+@client.command()
+async def place(ctx, pos: int):
+    global turn
+    global player1
+    global player2
+    global board
+    global count
+    print(pos)
+    if pos > 10 :
+        print('nein')
+        await ctx.send('Du musst eine Zahl von  1-9  und ein freies feld wählen')
+        pass
+    elif pos < 0 :
+        print('nein')
+        await ctx.send('Du musst eine Zahl von  1-9  und ein freies feld wählen')
+        pass
+    elif board[pos - 1] != ':white_large_square:':
+        print('nein')
+        await ctx.send('Du musst eine Zahl von  1-9  und ein freies feld wählen')
+        pass
+
+    if not gameOver:
+        mark = ''
+        if turn == ctx.author:
+            print('kommt durch author')
+            if turn == player1:
+                mark = ':regional_indicator_x:'
+            elif turn == player2:
+                mark = ':o2:'
+            if pos < 10 and pos > 0 and board[pos - 1] == ':white_large_square:':
+                board[pos - 1] = mark
+                count += 1
+                print('ja')
+                line = ''
+                for x in range(len(board)):
+                    if x == 2 or x == 5 or x == 8:
+                        line += ' ' + board[x]
+                        await ctx.send(line)
+                        line = ''
+                    else:
+                        line += ' ' + board[x]
+                check_gewinner(umzugewinnen,mark)
+                if gameOver:
+                    await ctx.send(f'{mark} gewinnt!')
+                elif count >= 9:
+                    await ctx.send('Unentschieden! Niemand gewinnt')
+
+                if turn == player1:
+                    turn = player2
+                elif turn == player2:
+                    turn = player1
+
+
+        else:
+            await ctx.send('Du bist nicht dran')
+    else:
+        await ctx.send('Du hast grad kein Spiel am laufen')
+
+def check_gewinner(umzugewinnen, mark):
+    global gameOver
+    for condition in umzugewinnen:
+        if board[condition[0]] == mark and board[condition[1]] == mark and board[condition[2]] == mark:
+            gameOver = True
+
+@tictactoe.error
+async def tictactoe_error(ctx, error):
+    if isinstance(error,commands.BadArgument):
+        await ctx.send('Markier einen gültigen Spieler')
+
+@client.command()
+async def now_playing_ttt(ctx):
+    if not gameOver:
+        await ctx.send(f'Es spielen gerade: {player1} und {player2}')
+    else:
+        await ctx.send('Es spielt gerade niemand')
+
+@client.command()
+async def reset_ttt(ctx):
+    global gameOver
+    if not gameOver:
+        global board
+        global count
+
+        gameOver = True
+        count = 0
+        board = [':white_large_square:', ':white_large_square:', ':white_large_square:',
+                 ':white_large_square:', ':white_large_square:', ':white_large_square:',
+                 ':white_large_square:', ':white_large_square:', ':white_large_square:']
+        await ctx.send('Spielstand zurück gesetzt')
+    else:
+        await ctx.send('Es spielt gerade niemand')
     
     
 #Errors:
